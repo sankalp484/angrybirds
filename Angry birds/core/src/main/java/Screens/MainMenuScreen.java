@@ -32,14 +32,15 @@ public class MainMenuScreen implements Screen {
         game.batch.draw(logo,(Main.WIDTH/2)-(logo.getWidth()/2),(Main.HEIGHT/2));
 
         int x = (Main.WIDTH/2)-(start_btn.getWidth()/2);
-        if (Gdx.input.getX()>x && Gdx.input.getX()<x+start_btn.getWidth() && game.HEIGHT - Gdx.input.getY()>Main.HEIGHT/4-75 && game.HEIGHT - Gdx.input.getY()<(Main.HEIGHT/4-75)+start_btn.getHeight()){
-            game.batch.draw(start_btn,x-38,Main.HEIGHT/4-100,397,258);
+        if (Gdx.input.getX()> x && Gdx.input.getX()< x +start_btn.getWidth() && game.HEIGHT - Gdx.input.getY()>Main.HEIGHT/4-75 && game.HEIGHT - Gdx.input.getY()<(Main.HEIGHT/4-75)+start_btn.getHeight()){
+            game.batch.draw(start_btn, x -38,Main.HEIGHT/4-100,397,258);
             if (Gdx.input.isTouched()){
                 this.dispose();
-                game.setScreen(new LevelScreen(game));
+                game.currentLevel = new LevelScreen(game);
+                game.setScreen(game.currentLevel);
             }
         }else{
-            game.batch.draw(start_btn,x,Main.HEIGHT/4-75);
+            game.batch.draw(start_btn, x,Main.HEIGHT/4-75);
         }
 
         if (Gdx.input.getX()<exit_btn.getWidth() && game.HEIGHT - Gdx.input.getY()<exit_btn.getHeight()){
