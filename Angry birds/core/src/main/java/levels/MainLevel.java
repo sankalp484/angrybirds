@@ -36,12 +36,12 @@ public class MainLevel implements Screen {
         win = new Texture("win button.png");
         loose = new Texture("loose button.png");
         ground = new Texture("ground.png");
-        catp = new catapult(game);
+        camera = new OrthographicCamera(Gdx.graphics.getWidth() / ppm, Gdx.graphics.getHeight() / ppm);
+        catp = new catapult(game,camera);
 
         // Initialize Box2D world
         world = new World(new Vector2(0, -9.81f), true);
         b2dr = new Box2DDebugRenderer();
-        camera = new OrthographicCamera(Gdx.graphics.getWidth() / ppm, Gdx.graphics.getHeight() / ppm);
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0); // Center the camera
         camera.update(); // Update the camera's matrix
 
