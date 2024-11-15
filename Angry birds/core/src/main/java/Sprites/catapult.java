@@ -1,5 +1,6 @@
 package Sprites;
 
+import Sprites.birds.Bird;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -123,26 +124,22 @@ public class catapult implements InputProcessor {
         return false;
     }
 
-    public void render(float delta) {
+    public void render(float delta, Bird draggingBird) {
         game.batch.begin();
         game.batch.draw(catp, 500, 203);
         game.batch.end();
 
-        camera.update();
         shapeRenderer.setProjectionMatrix(camera.combined);
 
         Gdx.gl.glLineWidth(10);
         shapeRenderer.setColor(Color.BLACK);
-
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
-        // Draw the lines anchored at fixed start points
-        if (isDragging1) {
-            shapeRenderer.line(startPoint1.x, startPoint1.y, endPoint1.x, endPoint1.y);
-        }
-        if (isDragging2) {
-            shapeRenderer.line(startPoint2.x, startPoint2.y, endPoint2.x, endPoint2.y);
-        }
+        Vector2 anchor1 = draggingBird != null ? draggingBird.body.getPosition() : startPoint1;
+        Vector2 anchor2 = draggingBird != null ? draggingBird.body.getPosition() : startPoint2;
+
+        shapeRenderer.line(startPoint1.x, startPoint1.y, anchor1.x, anchor1.y);
+        shapeRenderer.line(startPoint2.x, startPoint2.y, anchor2.x, anchor2.y);
 
         shapeRenderer.end();
         Gdx.gl.glLineWidth(1);

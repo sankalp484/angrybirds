@@ -16,7 +16,7 @@ public class MainLevel implements Screen {
     public World world;
     private Box2DDebugRenderer b2dr;
     public Main game;
-    private OrthographicCamera camera;
+    public OrthographicCamera camera;
     private ShapeRenderer shapeRenderer;
     public Texture menu_inac;
     public Texture menu_ac;
@@ -28,6 +28,7 @@ public class MainLevel implements Screen {
     private float win_height = 200;
     private float loose_width = 477;
     private float loose_height = 200;
+    private boolean isDragging = false;
 
     public MainLevel(Main game) {
         this.game = game;
@@ -110,7 +111,6 @@ public class MainLevel implements Screen {
         game.batch.draw(ground,0,0);
 
         game.batch.end();
-        catp.render(delta);
     }
 
     @Override
