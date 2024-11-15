@@ -17,7 +17,7 @@ public class MainLevel implements Screen {
     private Box2DDebugRenderer b2dr;
     public Main game;
     public OrthographicCamera camera;
-    private ShapeRenderer shapeRenderer;
+    public ShapeRenderer shapeRenderer;
     public Texture menu_inac;
     public Texture menu_ac;
     public Texture win;

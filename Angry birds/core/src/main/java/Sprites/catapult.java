@@ -1,20 +1,15 @@
 package Sprites;
 
 import Sprites.birds.Bird;
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import rio.com.Main;
 
-public class catapult implements InputProcessor {
+public class catapult{
     private Main game;
     private Texture catp;
     private ShapeRenderer shapeRenderer;
@@ -32,7 +27,7 @@ public class catapult implements InputProcessor {
     private boolean isDragging2 = false;
 
     // Pixels per meter scaling factor
-    private static final float ppm = 100f; // Change this to match the ppm in your MainLevel class
+    private static final float ppm = 100f;
 
     public catapult(Main game, OrthographicCamera cam) {
         this.game = game;
@@ -46,101 +41,24 @@ public class catapult implements InputProcessor {
 
         startPoint2 = new Vector2(555 / ppm, 375 / ppm); // Right point
         endPoint2 = new Vector2(startPoint2);
-
-        Gdx.input.setInputProcessor(this);
-    }
-
-    @Override
-    public boolean keyDown(int i) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int i) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char c) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT) {
-            // Begin dragging
-            isDragging1 = true;
-            isDragging2 = true;
-
-            // Convert screen coordinates to world coordinates
-            Vector3 worldCoords = camera.unproject(new Vector3(screenX, screenY, 0));
-            Vector2 mousePos = new Vector2(worldCoords.x, worldCoords.y);
-
-            // Update end points to follow the cursor
-            endPoint1.set(mousePos);
-            endPoint2.set(mousePos);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        Vector3 worldCoords = camera.unproject(new Vector3(screenX, screenY, 0));
-        Vector2 mousePos = new Vector2(worldCoords.x, worldCoords.y);
-
-        // Update only the end points to follow the cursor
-        if (isDragging1) {
-            endPoint1.set(mousePos);
-        }
-        if (isDragging2) {
-            endPoint2.set(mousePos);
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean mouseMoved(int i, int i1) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(float v, float v1) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT) {
-            // Stop dragging
-            isDragging1 = false;
-            isDragging2 = false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean touchCancelled(int i, int i1, int i2, int i3) {
-        return false;
     }
 
     public void render(float delta, Bird draggingBird) {
         game.batch.begin();
-        game.batch.draw(catp, 500, 203);
+        game.batch.draw(catp, 500, 203); // Draw the catapult texture
         game.batch.end();
 
+        // Render the catapult lines
         shapeRenderer.setProjectionMatrix(camera.combined);
-
         Gdx.gl.glLineWidth(10);
         shapeRenderer.setColor(Color.BLACK);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
+        // If dragging a bird, anchor the lines to its position
         Vector2 anchor1 = draggingBird != null ? draggingBird.body.getPosition() : startPoint1;
         Vector2 anchor2 = draggingBird != null ? draggingBird.body.getPosition() : startPoint2;
-
         shapeRenderer.line(startPoint1.x, startPoint1.y, anchor1.x, anchor1.y);
         shapeRenderer.line(startPoint2.x, startPoint2.y, anchor2.x, anchor2.y);
-
         shapeRenderer.end();
         Gdx.gl.glLineWidth(1);
     }

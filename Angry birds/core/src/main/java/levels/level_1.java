@@ -101,8 +101,7 @@ public class level_1 extends MainLevel implements Screen {
                 break;
             }
         }
-
-        catp.render(delta, draggingBird);
+        catp.render(delta,draggingBird);
 
         for (Bird bird : birds) {
             bird.render(delta);
