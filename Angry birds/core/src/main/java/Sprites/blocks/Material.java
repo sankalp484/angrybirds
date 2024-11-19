@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import levels.MainLevel;
 
@@ -37,7 +38,12 @@ public abstract class Material {
         PolygonShape rectangle = new PolygonShape();
         rectangle.setAsBox(width / 2 / MainLevel.ppm, height / 2 / MainLevel.ppm); // Set width and height in Box2D units
 
-        body.createFixture(rectangle, 1.0f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = rectangle;
+        fixtureDef.density = 1.0f;      // Standard density
+        fixtureDef.friction = 1.0f;
+
+        body.createFixture(fixtureDef);
         rectangle.dispose();
     }
 
@@ -62,5 +68,9 @@ public abstract class Material {
         );
 
         level.game.batch.end();
+    }
+
+    public void makeDynamic() {
+        body.setType(BodyDef.BodyType.DynamicBody);
     }
 }
