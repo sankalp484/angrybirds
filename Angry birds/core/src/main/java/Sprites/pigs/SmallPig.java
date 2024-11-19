@@ -15,4 +15,9 @@ public class SmallPig extends Pig {
         textureHeight = 48; // Height for SmallPig
         rad = 24;
     }
+
+    @Override
+    protected void initializeHitPoints() {
+        hitPoints = 1; // SmallPig requires 1 hit
+    }
 }

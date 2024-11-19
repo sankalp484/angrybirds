@@ -14,4 +14,9 @@ public class Glass extends Material {
         width = 204;  // Width for Glass material
         height = 20; // Height for Glass material
     }
+
+    @Override
+    protected void initializeHitPoints() {
+        hitPoints = 1; // Glass requires 1 hit
+    }
 }

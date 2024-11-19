@@ -15,4 +15,9 @@ public class BigPig extends Pig {
         textureHeight = 99; // Height for BigPig
         rad = 45;
     }
+
+    @Override
+    protected void initializeHitPoints() {
+        hitPoints = 3;
+    }
 }

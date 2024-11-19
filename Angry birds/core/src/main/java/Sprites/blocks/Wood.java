@@ -14,4 +14,9 @@ public class Wood extends Material {
         width = 204;  // Width for Wood material
         height = 20; // Height for Wood material
     }
+
+    @Override
+    protected void initializeHitPoints() {
+        hitPoints = 2;
+    }
 }

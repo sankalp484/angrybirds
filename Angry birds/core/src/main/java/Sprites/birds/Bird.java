@@ -25,6 +25,8 @@ public abstract class Bird {
     private Vector2 initialTouchPos;
     private boolean trajectoryVisible = false;
     private Array<Vector2> trajectoryPoints;
+    private float stationaryTime = 0;
+    private boolean hasLaunched = false;
 
     public Bird(MainLevel level, float xpos, float ypos) {
         this.level = level;
@@ -34,6 +36,8 @@ public abstract class Bird {
         createCircle();
         trajectoryPoints = new Array<>();
         initialTouchPos = new Vector2(540,380);
+
+        body.setUserData(this);
     }
 
     // Abstract method for subclasses to specify their texture
@@ -84,6 +88,21 @@ public abstract class Bird {
             }
             level.shapeRenderer.end();
         }
+
+        Vector2 velocity = body.getLinearVelocity();
+
+        if (hasLaunched) {
+            // Only count stationary time if the bird has been launched
+            if (velocity.len() < 0.1f) { // Bird is nearly stationary
+                stationaryTime += delta;
+                if (stationaryTime >= 1f) { // Destroy after 1 second of being stationary
+                    level.world.destroyBody(body);
+                    level.birds.removeValue(this, true);
+                }
+            } else {
+                stationaryTime = 0; // Reset timer if the bird moves
+            }
+        }
     }
 
     public void startDrag(Vector2 cursorPosition) {
@@ -105,6 +124,7 @@ public abstract class Bird {
     public void release() {
         if (isDragging) {
             isDragging = false;
+            hasLaunched = true;
             body.setType(BodyDef.BodyType.DynamicBody);
             trajectoryVisible = false; // Hide trajectory when released
             body.setLinearVelocity(calculateInitialVelocity());

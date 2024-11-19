@@ -7,6 +7,8 @@ import Sprites.birds.YellowBird;
 import Sprites.blocks.Material;
 import Sprites.blocks.Rock;
 import Sprites.blocks.Wood;
+import Sprites.pigs.BigPig;
+import Sprites.pigs.MediumPig;
 import Sprites.pigs.Pig;
 import Sprites.pigs.SmallPig;
 import com.badlogic.gdx.graphics.Texture;
@@ -42,8 +44,8 @@ public class level_3 extends MainLevel {
         rockBlocks.add(new Rock(this, startX + 200, groundY, 90));
 
         // Add two pigs between the rock blocks
-        pigs.add(new SmallPig(this, startX + 50, groundY + 20));
-        pigs.add(new SmallPig(this, startX + 150, groundY + 20));
+        pigs.add(new BigPig(this, startX + 50, groundY + 20));
+        pigs.add(new MediumPig(this, startX + 150, groundY + 20));
 
         // Middle layer: Horizontal wooden block
         woodBlocks.add(new Wood(this, startX + 100, groundY + 204, 0));

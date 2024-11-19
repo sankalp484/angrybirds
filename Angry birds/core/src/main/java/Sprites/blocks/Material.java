@@ -16,15 +16,20 @@ public abstract class Material {
     protected float width;    // Material width
     protected float height;   // Material height
     protected BodyDef mDef;
+    protected int hitPoints;
 
     public Material(MainLevel level, float posX, float posY, float rotation) {
         this.level = level;
         initializeTexture();
         createRectangle(posX, posY, rotation);
+        initializeHitPoints();
+
+        body.setUserData(this);
     }
 
     // Abstract method for subclasses to specify their texture and size
     protected abstract void initializeTexture();
+    protected abstract void initializeHitPoints();
 
     // Create Box2D body with rectangle shape, using position and rotation
     private void createRectangle(float posX, float posY, float rotation) {
@@ -45,6 +50,16 @@ public abstract class Material {
 
         body.createFixture(fixtureDef);
         rectangle.dispose();
+    }
+
+    public void handleCollision() {
+        hitPoints--;
+        if (hitPoints <= 0 && body != null) {
+            if (!level.bodiesToDestroy.contains(body, true)) {
+                level.bodiesToDestroy.add(body);
+            }
+            level.blocks.removeValue(this, true); // Remove from game objects
+        }
     }
 
     // Render the material texture at the body's position
@@ -68,9 +83,5 @@ public abstract class Material {
         );
 
         level.game.batch.end();
-    }
-
-    public void makeDynamic() {
-        body.setType(BodyDef.BodyType.DynamicBody);
     }
 }

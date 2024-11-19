@@ -35,15 +35,17 @@ public class MainLevel implements Screen {
     public Texture loose;
     public Texture ground;
 
-    private Array<Material> blocks; // Array for all glass blocks
-    private Array<Pig> pigs;    // Array for all pigs
-    private Array<Bird> birds;       // Array for all birds
+    public Array<Material> blocks; // Array for all glass blocks
+    public Array<Pig> pigs;    // Array for all pigs
+    public Array<Bird> birds;       // Array for all birds
     private catapult catp;
 
     private float win_width = 229;
     private float win_height = 200;
     private float loose_width = 477;
     private float loose_height = 200;
+    public Array<Body> bodiesToDestroy;
+    private boolean start_collision = false;
 
     public MainLevel(Main game) {
         this.game = game;
@@ -54,6 +56,8 @@ public class MainLevel implements Screen {
         win = new Texture("win button.png");
         loose = new Texture("loose button.png");
         ground = new Texture("ground.png");
+
+        bodiesToDestroy = new Array<>();
 
         // Initialize camera, world, and debug renderer
         camera = new OrthographicCamera(Gdx.graphics.getWidth() / ppm, Gdx.graphics.getHeight() / ppm);
@@ -74,6 +78,7 @@ public class MainLevel implements Screen {
         birds = new Array<>();
 
         setupInputHandling();
+        setupContactListener();
     }
 
     private void createGround() {
@@ -99,6 +104,7 @@ public class MainLevel implements Screen {
                 for (Bird bird : birds) {
                     bird.startDrag(touchPos);
                 }
+                start_collision = true;
                 return true;
             }
 
@@ -123,6 +129,25 @@ public class MainLevel implements Screen {
         });
     }
 
+    private void setupContactListener() {
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                Object a = contact.getFixtureA().getBody().getUserData();
+                Object b = contact.getFixtureB().getBody().getUserData();
+
+                if (a instanceof Material && start_collision) ((Material) a).handleCollision();
+                if (b instanceof Material && start_collision) ((Material) b).handleCollision();
+                if (a instanceof Pig && start_collision) ((Pig) a).handleCollision();
+                if (b instanceof Pig && start_collision) ((Pig) b).handleCollision();
+            }
+
+            @Override public void endContact(Contact contact) {}
+            @Override public void preSolve(Contact contact, Manifold oldManifold) {}
+            @Override public void postSolve(Contact contact, ContactImpulse impulse) {}
+        });
+    }
+
     public void setupLevel(Array<Bird> birds, Array<Material> glassBlocks, Array<Pig> pigs) {
         this.birds = birds;
         this.blocks = glassBlocks;
@@ -131,7 +156,13 @@ public class MainLevel implements Screen {
 
     @Override
     public void render(float delta) {
-        world.step(1 / 60f, 6, 2); // Step the physics world
+        world.step(1 / 60f, 8, 2); // Step the physics world
+        for (Body body : bodiesToDestroy) {
+            if (body != null) {
+                world.destroyBody(body);
+            }
+        }
+        bodiesToDestroy.clear();
         camera.update();
         b2dr.render(world, camera.combined);
 
@@ -183,6 +214,15 @@ public class MainLevel implements Screen {
         }
         for (Pig pig : pigs) {
             pig.render(delta);
+        }
+
+        if (pigs.size == 0) {
+            game.setScreen(new WinScreen(game));
+        }
+
+        // Check lose condition
+        if (birds.size == 0 && pigs.size > 0) {
+            game.setScreen(new LooseScreen(game));
         }
     }
 

@@ -6,6 +6,7 @@ import Sprites.birds.YellowBird;
 import Sprites.birds.BlueBird;
 import Sprites.blocks.Glass;
 import Sprites.blocks.Material;
+import Sprites.pigs.MediumPig;
 import Sprites.pigs.Pig;
 import Sprites.pigs.SmallPig;
 import com.badlogic.gdx.graphics.Texture;
@@ -37,7 +38,7 @@ public class level_1 extends MainLevel {
     private void createGlassSetup(Array<Material> glassBlocks, Array<Pig> pigs, float startX, float groundY) {
         glassBlocks.add(new Glass(this, startX, groundY, 90));
         glassBlocks.add(new Glass(this, startX + 200, groundY, 90));
-        pigs.add(new SmallPig(this, startX + 102, groundY + 20));
+        pigs.add(new MediumPig(this, startX + 102, groundY + 20));
         glassBlocks.add(new Glass(this, startX, groundY + 204, 0));
         glassBlocks.add(new Glass(this, startX + 200, groundY + 204, 0));
     }

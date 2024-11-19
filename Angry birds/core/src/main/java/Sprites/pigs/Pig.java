@@ -18,6 +18,7 @@ public abstract class Pig {
     protected float posx;
     protected float posy;
     protected float rad;
+    protected int hitPoints;
 
     public Pig(MainLevel level, float posx, float posy) {
         this.level = level;
@@ -25,10 +26,24 @@ public abstract class Pig {
         this.posy = posy;
         initializeTexture();
         createCircle();
+        initializeHitPoints();
+        body.setUserData(this);
     }
 
     // Abstract method for subclasses to specify their texture and size
     protected abstract void initializeTexture();
+
+    protected abstract void initializeHitPoints();
+
+    public void handleCollision() {
+        hitPoints--;
+        if (hitPoints <= 0 && body != null) {
+            if (!level.bodiesToDestroy.contains(body, true)) {
+                level.bodiesToDestroy.add(body);
+            }
+            level.pigs.removeValue(this, true); // Remove from game objects
+        }
+    }
 
     // Create Box2D body with circle shape
     private void createCircle() {

@@ -14,4 +14,9 @@ public class Rock extends Material {
         width = 204;  // Width for Rock material
         height = 20; // Height for Rock material (square)
     }
+
+    @Override
+    protected void initializeHitPoints() {
+        hitPoints = 3;
+    }
 }

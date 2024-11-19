@@ -15,4 +15,9 @@ public class MediumPig extends Pig {
         textureHeight = 79; // Height for MediumPig
         rad = 37;
     }
+
+    @Override
+    protected void initializeHitPoints() {
+        hitPoints = 2;
+    }
 }
