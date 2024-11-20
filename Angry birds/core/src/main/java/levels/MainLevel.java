@@ -31,8 +31,6 @@ public class MainLevel implements Screen {
 
     public Texture menu_inac;
     public Texture menu_ac;
-    public Texture win;
-    public Texture loose;
     public Texture ground;
 
     public Array<Material> blocks; // Array for all glass blocks
@@ -40,10 +38,6 @@ public class MainLevel implements Screen {
     public Array<Bird> birds;       // Array for all birds
     private catapult catp;
 
-    private float win_width = 229;
-    private float win_height = 200;
-    private float loose_width = 477;
-    private float loose_height = 200;
     public Array<Body> bodiesToDestroy;
     private boolean start_collision = false;
 
@@ -53,8 +47,6 @@ public class MainLevel implements Screen {
         // Load shared textures
         menu_inac = new Texture("Menu Inactive.png");
         menu_ac = new Texture("Menu active.png");
-        win = new Texture("win button.png");
-        loose = new Texture("loose button.png");
         ground = new Texture("ground.png");
 
         bodiesToDestroy = new Array<>();
@@ -176,23 +168,6 @@ public class MainLevel implements Screen {
             game.batch.draw(menu_inac,30,Main.HEIGHT-menu_inac.getHeight()-30);
         }
 
-        if (Gdx.input.getX()>game.WIDTH-(win_width+loose_width) && Gdx.input.getX()<game.WIDTH && game.HEIGHT - Gdx.input.getY()>game.HEIGHT-win_height && game.HEIGHT - Gdx.input.getY()<game.HEIGHT){
-            game.batch.draw(win, game.WIDTH-(win_width+loose_width), game.HEIGHT-win_height, win_width,win_height);
-            if (Gdx.input.isTouched()){
-                game.setScreen(new WinScreen(game));
-            }
-        }else{
-            game.batch.draw(win, game.WIDTH-(win_width+loose_width), game.HEIGHT-win_height, win_width,win_height);
-        }
-
-        if (Gdx.input.getX()>game.WIDTH-(loose_width) && Gdx.input.getX()<game.WIDTH && game.HEIGHT - Gdx.input.getY()>game.HEIGHT-win_height && game.HEIGHT - Gdx.input.getY()<game.HEIGHT){
-            game.batch.draw(loose, game.WIDTH-(loose_width), game.HEIGHT-win_height, loose_width,loose_height);
-            if (Gdx.input.isTouched()){
-                game.setScreen(new LooseScreen(game));
-            }
-        }else{
-            game.batch.draw(loose, game.WIDTH-(loose_width), game.HEIGHT-win_height, loose_width,loose_height);
-        }
         game.batch.draw(ground,0,0);
         game.batch.end();
 

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import levels.MainLevel;
 import levels.level_1;
 import levels.level_2;
 import levels.level_3;
@@ -70,15 +69,24 @@ public class PauseMenu implements Screen {
                 this.dispose();
                 switch (game.checkLevel) {
                     case 1:
-                        game.setScreen(new level_1(game));
+                        level_1 level1 = new level_1(game);
+                        game.currentLevel = level1;
+                        game.checkLevel = 1;
+                        game.setScreen(level1);
                         break;
 
                     case 2:
-                        game.setScreen(new level_2(game));
+                        level_2 level2 = new level_2(game);
+                        game.currentLevel = level2;
+                        game.checkLevel = 2;
+                        game.setScreen(level2);
                         break;
 
                     case 3:
-                        game.setScreen(new level_3(game));
+                        level_3 level3 = new level_3(game);
+                        game.currentLevel = level3;
+                        game.checkLevel = 3;
+                        game.setScreen(level3);
                         break;
                 }
             }
