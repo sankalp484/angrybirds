@@ -82,10 +82,27 @@ public class MainLevel implements Screen {
         Body gBody = world.createBody(gbDef);
 
         PolygonShape gShape = new PolygonShape();
-        gShape.setAsBox(1920 / ppm, 205 / ppm); // Width and height in Box2D units
+        gShape.setAsBox(1920 / ppm, 205 / ppm);
 
-        gBody.createFixture(gShape, 1.0f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = gShape;
+        fixtureDef.density = 1.0f;      // Standard density
+        fixtureDef.friction = 5.0f;
+
+        gBody.createFixture(fixtureDef);
         gShape.dispose();
+
+        //Right Boundary
+        BodyDef rightBoundDef = new BodyDef();
+        rightBoundDef.position.set(1950/ppm,0);
+
+        Body rBound = world.createBody(rightBoundDef);
+
+        PolygonShape rbShape = new PolygonShape();
+        rbShape.setAsBox(20/ppm,1080/ppm);
+
+        rBound.createFixture(rbShape,1.0f);
+        rbShape.dispose();
     }
 
     private void setupInputHandling() {

@@ -27,6 +27,7 @@ public abstract class Bird {
     private Array<Vector2> trajectoryPoints;
     private float stationaryTime = 0;
     public boolean hasLaunched = false;
+    private float activityTime = 0;
 
     public Bird(MainLevel level, float xpos, float ypos) {
         this.level = level;
@@ -92,6 +93,7 @@ public abstract class Bird {
         Vector2 velocity = body.getLinearVelocity();
 
         if (hasLaunched) {
+            activityTime += delta;
             // Only count stationary time if the bird has been launched
             if (velocity.len() < 0.1f) { // Bird is nearly stationary
                 stationaryTime += delta;
@@ -101,6 +103,11 @@ public abstract class Bird {
                 }
             } else {
                 stationaryTime = 0; // Reset timer if the bird moves
+            }
+
+            if (activityTime > 8f) { // Destroy after 1 second of being stationary
+                level.world.destroyBody(body);
+                level.birds.removeValue(this, true);
             }
         }
     }
