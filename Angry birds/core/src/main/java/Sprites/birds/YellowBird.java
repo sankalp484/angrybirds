@@ -27,7 +27,7 @@ public class YellowBird extends Bird {
     // Method to create an equilateral triangle-shaped body with 54-pixel side length
     private void createTriangle() {
         cDef = new BodyDef();
-        cDef.type = BodyDef.BodyType.DynamicBody;
+        cDef.type = BodyDef.BodyType.StaticBody;
         cDef.position.set(xpos / MainLevel.ppm, ypos / MainLevel.ppm);
 
         body = level.world.createBody(cDef);

@@ -26,7 +26,7 @@ public abstract class Bird {
     private boolean trajectoryVisible = false;
     private Array<Vector2> trajectoryPoints;
     private float stationaryTime = 0;
-    private boolean hasLaunched = false;
+    public boolean hasLaunched = false;
 
     public Bird(MainLevel level, float xpos, float ypos) {
         this.level = level;
@@ -106,7 +106,10 @@ public abstract class Bird {
     }
 
     public void startDrag(Vector2 cursorPosition) {
-        if (isCursorTouchingBody(cursorPosition)) {
+        Vector2 launchPosition = new Vector2(535 / MainLevel.ppm, 375 / MainLevel.ppm);
+        Vector2 bodyPosition = body.getPosition();
+
+        if (bodyPosition.epsilonEquals(launchPosition, 0.1f) && isCursorTouchingBody(cursorPosition)) {
             isDragging = true;
             body.setType(BodyDef.BodyType.StaticBody);
             trajectoryVisible = true;
@@ -170,5 +173,9 @@ public abstract class Bird {
             }
         }
         return false;
+    }
+
+    public boolean isReadyForRemoval() {
+        return hasLaunched && stationaryTime >= 1f;
     }
 }

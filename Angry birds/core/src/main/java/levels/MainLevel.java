@@ -4,11 +4,9 @@ import Screens.LooseScreen;
 import Screens.PauseMenu;
 import Screens.WinScreen;
 import Sprites.birds.Bird;
-import Sprites.blocks.Glass;
 import Sprites.blocks.Material;
 import Sprites.catapult;
 import Sprites.pigs.Pig;
-import Sprites.pigs.SmallPig;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
@@ -40,6 +38,10 @@ public class MainLevel implements Screen {
 
     public Array<Body> bodiesToDestroy;
     private boolean start_collision = false;
+
+    private int currentBirdIndex = 0;
+    private static final float launchX = 535; // In pixels
+    private static final float launchY = 375; // In pixels
 
     public MainLevel(Main game) {
         this.game = game;
@@ -148,7 +150,7 @@ public class MainLevel implements Screen {
 
     @Override
     public void render(float delta) {
-        world.step(1 / 60f, 8, 2); // Step the physics world
+        world.step(1 / 100f, 8, 2); // Step the physics world
         for (Body body : bodiesToDestroy) {
             if (body != null) {
                 world.destroyBody(body);
@@ -189,6 +191,17 @@ public class MainLevel implements Screen {
         }
         for (Pig pig : pigs) {
             pig.render(delta);
+        }
+
+        if (currentBirdIndex < birds.size) {
+            Bird currentBird = birds.get(currentBirdIndex);
+            if (!currentBird.hasLaunched && !currentBird.isDragging) {
+                currentBird.body.setTransform(launchX / ppm, launchY / ppm, 0); // Place at launch position
+            } else if (currentBird.isReadyForRemoval()) {
+                // Destroy the bird and advance to the next one
+                bodiesToDestroy.add(currentBird.body);
+                birds.removeIndex(currentBirdIndex);
+            }
         }
 
         if (pigs.size == 0) {

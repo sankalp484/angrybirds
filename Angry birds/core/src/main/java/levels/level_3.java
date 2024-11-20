@@ -23,9 +23,9 @@ public class level_3 extends MainLevel {
 
         background = new Texture("level 3 bg.jpg");
         Array<Bird> birds = new Array<>();
-        birds.add(new RedBird(this, 450, 500));
-        birds.add(new YellowBird(this, 375, 500));
-        birds.add(new BlueBird(this, 300, 500));
+        birds.add(new RedBird(this, 450, 225));
+        birds.add(new YellowBird(this, 375, 230));
+        birds.add(new BlueBird(this, 300, 220));
 
         Array<Wood> woodBlocks = new Array<>();
         Array<Rock> rockBlocks = new Array<>();
