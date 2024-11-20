@@ -19,6 +19,9 @@ import com.badlogic.gdx.utils.Array;
 import rio.com.Main;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class MainLevel implements Screen {
     public static final float ppm = 100f; // Pixels per meter
     public World world;
@@ -43,6 +46,9 @@ public class MainLevel implements Screen {
     private static final float launchX = 535; // In pixels
     private static final float launchY = 375; // In pixels
 
+    private Queue<Runnable> scheduledTasks;
+
+
     public MainLevel(Main game) {
         this.game = game;
 
@@ -52,6 +58,7 @@ public class MainLevel implements Screen {
         ground = new Texture("ground.png");
 
         bodiesToDestroy = new Array<>();
+        scheduledTasks = new LinkedList<>();
 
         // Initialize camera, world, and debug renderer
         camera = new OrthographicCamera(Gdx.graphics.getWidth() / ppm, Gdx.graphics.getHeight() / ppm);
@@ -104,6 +111,11 @@ public class MainLevel implements Screen {
         rBound.createFixture(rbShape,1.0f);
         rbShape.dispose();
     }
+
+    public void scheduleTask(Runnable task) {
+        scheduledTasks.add(task);
+    }
+
 
     private void setupInputHandling() {
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -167,6 +179,14 @@ public class MainLevel implements Screen {
 
     @Override
     public void render(float delta) {
+        while (!scheduledTasks.isEmpty()) {
+            try {
+                scheduledTasks.poll().run();
+            } catch (Exception e) {
+                Gdx.app.log("Error", "Exception during task execution: " + e.getMessage());
+            }
+        }
+
         world.step(1 / 100f, 8, 2); // Step the physics world
         for (Body body : bodiesToDestroy) {
             if (body != null) {

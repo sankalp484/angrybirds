@@ -1,5 +1,6 @@
 package Sprites.birds;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -7,6 +8,8 @@ import levels.MainLevel;
 
 // YellowBird subclass with equilateral triangle shape
 public class YellowBird extends Bird {
+    private boolean hasPowerActivated = false;
+
     public YellowBird(MainLevel level,float xpos,float ypos) {
         super(level, xpos, ypos);
     }
@@ -47,5 +50,16 @@ public class YellowBird extends Bird {
 
         body.createFixture(triangleShape, 1.0f);
         triangleShape.dispose();
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+
+        // Check for user input to activate the power
+        if (!hasPowerActivated && hasLaunched && Gdx.input.justTouched()) {
+            body.setLinearVelocity(body.getLinearVelocity().scl(3)); // Double the velocity
+            hasPowerActivated = true; // Prevent multiple activations
+        }
     }
 }
