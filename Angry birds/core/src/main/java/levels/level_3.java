@@ -4,6 +4,7 @@ import Sprites.birds.Bird;
 import Sprites.birds.BlueBird;
 import Sprites.birds.RedBird;
 import Sprites.birds.YellowBird;
+import Sprites.blocks.Glass;
 import Sprites.blocks.Material;
 import Sprites.blocks.Rock;
 import Sprites.blocks.Wood;
@@ -42,16 +43,22 @@ public class level_3 extends MainLevel {
         // Base layer: Two vertical rock blocks
         rockBlocks.add(new Rock(this, startX, groundY, 90));
         rockBlocks.add(new Rock(this, startX + 200, groundY, 90));
-
+        rockBlocks.add(new Rock(this, startX, groundY +205, 90));
+        rockBlocks.add(new Rock(this, startX + 200, groundY + 205, 90));
+        rockBlocks.add(new Rock(this, startX + 100, groundY + 204 +1 + 204, 0));
         // Add two pigs between the rock blocks
-        pigs.add(new BigPig(this, startX + 50, groundY + 20));
-        pigs.add(new MediumPig(this, startX + 150, groundY + 20));
+        pigs.add(new MediumPig(this, startX + 90, groundY ));
+        pigs.add(new MediumPig(this, startX + 150, groundY ));
+
 
         // Middle layer: Horizontal wooden block
-        woodBlocks.add(new Wood(this, startX + 100, groundY + 204, 0));
+        rockBlocks.add(new Rock(this, startX , groundY + 204, 0));
 
         // Top layer: Rock block on top of the wooden block
-        rockBlocks.add(new Rock(this, startX + 100, groundY + 250, 0));
+        rockBlocks.add(new Rock(this, startX + 200, groundY + 204, 0));
+        woodBlocks.add(new Wood(this, startX + 40, groundY + 100 + 204 + 1 + 204, 65));
+        pigs.add(new BigPig(this, startX + 100 , groundY + 5 + 204 + 1 + 204));
+        woodBlocks.add(new Wood(this, startX + 200 - 44 , groundY + 100 + 204 + 1 + 204, -65));
     }
 
     private Array<Material> mergeMaterials(Array<Wood> woodBlocks, Array<Rock> rockBlocks) {
