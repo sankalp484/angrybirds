@@ -9,17 +9,22 @@ import rio.com.Main;
 
 public class SavedGameScreen implements Screen {
     private final Main game;
-    private final Texture background;
-    private final BitmapFont font;
-    private final Texture backButton;
-    private final Texture Button;
+    private final transient Texture background;
+    private final transient Texture backButton;
+    private final transient Texture savedGames;
+    private final transient Texture saveGame1;
+    private final transient Texture saveGame2;
+    private final transient Texture saveGame3;
 
     public SavedGameScreen(Main game) {
         this.game = game;
         background = new Texture("menu_bg.png"); // Using the same background
-        backButton = new Texture("back.png"); // Assuming a "back" button texture exists
-        Button = new Texture("Play Inactive.png");
-        font = new BitmapFont(); // Default font, you can load a custom one if needed
+        backButton = new Texture("back.png");
+        savedGames = new Texture("Saved Games.png");
+        saveGame1 = new Texture("Save game 1.png");
+        saveGame2 = new Texture("Save game 2.png");
+        saveGame3 = new Texture("Save game 3.png");
+
     }
 
     @Override
@@ -32,34 +37,54 @@ public class SavedGameScreen implements Screen {
         // Draw the background
         game.batch.draw(background, 0, 0, Main.WIDTH, Main.HEIGHT);
 
-        // Draw the "Saved Games" title
-        font.getData().setScale(3f); // Adjust font size
-        font.draw(game.batch, "Saved Games", Main.WIDTH / 2f - 100, Main.HEIGHT - 100);
+        game.batch.draw(savedGames, Main.WIDTH / 2f - 3*savedGames.getWidth()/8f, Main.HEIGHT - 500,3*savedGames.getWidth()/4f,3*savedGames.getHeight()/4f);
 
         // Saved games entries and buttons
-        int startY = Main.HEIGHT - 200; // Starting Y position for the first saved game entry
-        int entrySpacing = 300;         // Increased spacing between each entry
-        int buttonWidth = Button.getWidth();
-        int buttonHeight = Button.getHeight();
+        int startY = Main.HEIGHT - 500; // Starting Y position for the first saved game entry
+        int entrySpacing = 100;         // Increased spacing between each entry
 
         for (int i = 1; i <= 3; i++) {
-            // Calculate positions dynamically
-            float entryX = Main.WIDTH / 2f - 100; // X position for the saved game text
-            float buttonX = entryX + 250;         // X position for the Play button
-            float entryY = startY - (i - 1) * entrySpacing; // Y position for this saved game entry
+            Texture saveGameTexture = null;
 
-            // Draw saved game text
-            font.getData().setScale(2f); // Adjust font size
-            font.draw(game.batch, i + ". Save Game " + i, entryX, entryY);
+            // Select the appropriate texture
+            if (i == 1) {
+                saveGameTexture = saveGame1;
+            } else if (i == 2) {
+                saveGameTexture = saveGame2;
+            } else if (i == 3) {
+                saveGameTexture = saveGame3;
+            }
 
-            // Draw the Play button beside the saved game text
-            game.batch.draw(Button, buttonX, entryY - buttonHeight / 2, buttonWidth, buttonHeight);
+            if (saveGameTexture != null) {
+                // Calculate position dynamically
+                float textureX = Main.WIDTH / 2f - saveGameTexture.getWidth() / 2f;
+                float textureY = startY - (i - 1) * entrySpacing - saveGameTexture.getHeight();
+
+                // Check if the mouse is hovering over the texture
+                boolean isHovering = Gdx.input.getX() > textureX && Gdx.input.getX() < textureX + saveGameTexture.getWidth() &&
+                    Main.HEIGHT - Gdx.input.getY() > textureY &&
+                    Main.HEIGHT - Gdx.input.getY() < textureY + saveGameTexture.getHeight();
+
+                if (isHovering) {
+                    // Highlight the button by slightly enlarging it
+                    game.batch.draw(saveGameTexture, textureX - 5, textureY - 5,
+                        saveGameTexture.getWidth() + 10, saveGameTexture.getHeight() + 10);
+
+                    // Handle click
+                    if (Gdx.input.isTouched()) {
+                        System.out.println("Save Game " + i + " clicked!"); // Replace with your desired action
+                        loadGame(i);
+                    }
+                } else {
+                    // Regular button
+                    game.batch.draw(saveGameTexture, textureX, textureY);
+                }
+            }
         }
 
         // Draw the back button
         int backBtnX = 10; // Position near the top-left
         int backBtnY = Main.HEIGHT - backButton.getHeight() - 10;
-        game.batch.draw(backButton, backBtnX, backBtnY); // Regular button
 
         boolean isHoveringBackButton = Gdx.input.getX() > backBtnX && Gdx.input.getX() < backBtnX + backButton.getWidth() &&
             Main.HEIGHT - Gdx.input.getY() > backBtnY &&
@@ -82,7 +107,9 @@ public class SavedGameScreen implements Screen {
         game.batch.end();
     }
 
-
+    private void loadGame(int i) {
+        game.setScreen(game.currentLevel);
+    }
 
 
     @Override
@@ -101,6 +128,5 @@ public class SavedGameScreen implements Screen {
     public void dispose() {
         background.dispose();
         backButton.dispose();
-        font.dispose();
     }
 }
