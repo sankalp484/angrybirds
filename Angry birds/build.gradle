@@ -9,8 +9,7 @@ buildscript {
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
-
-
+    // Required for JUnit Platform support in Gradle
   }
 }
 
@@ -30,40 +29,67 @@ allprojects {
 configure(subprojects) {
   apply plugin: 'java-library'
   sourceCompatibility = 11
+  dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+  }
 
   // From https://lyze.dev/2021/04/29/libGDX-Internal-Assets-List/
   // The article can be helpful when using assets.txt in your project.
   tasks.register('generateAssetList') {
     inputs.dir("${project.rootDir}/assets/")
+
     // projectFolder/assets
     File assetsFolder = new File("${project.rootDir}/assets/")
     // projectFolder/assets/assets.txt
     File assetsFile = new File(assetsFolder, "assets.txt")
-    // delete that file in case we've already created it
+
+    // Delete that file in case we've already created it
     assetsFile.delete()
 
-    // iterate through all files inside that folder
-    // convert it to a relative path
-    // and append it to the file assets.txt
+    // Iterate through all files inside that folder
+    // Convert it to a relative path
+    // And append it to the file assets.txt
     fileTree(assetsFolder).collect { assetsFolder.relativePath(it) }.each {
       assetsFile.append(it + "\n")
     }
   }
+
   processResources.dependsOn 'generateAssetList'
 
   compileJava {
     options.incremental = true
+  }
+
+  // Configure the test task for JUnit 5
+  test {
+    useJUnitPlatform() // Use JUnit 5 platform for testing
+    testLogging {
+      events 'passed', 'failed', 'skipped' // Log passed, failed, and skipped tests
+    }
+    // Specify the directories for test discovery
+    // Ensure test directories are correctly configured
+    include '**/Sprites/CatapultTest*' // Specify the test pattern or class name here
+
+    // Explicitly specify the test source set if necessary
+    // This is optional and can be adjusted based on your project structure
+    sourceSets {
+      test {
+        java {
+          srcDirs = ['src/test/java']
+        }
+      }
+    }
   }
 }
 
 subprojects {
   version = '$projectVersion'
   ext.appName = 'Angry Birds'
+
   repositories {
     mavenCentral()
     maven { url 'https://s01.oss.sonatype.org' }
-    // You may want to remove the following line if you have errors downloading dependencies.
-    mavenLocal()
+    mavenLocal() // Local repository
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://jitpack.io' }

@@ -16,8 +16,8 @@ public class catapult{
     private OrthographicCamera camera;
 
     // Fixed start points for the lines
-    private Vector2 startPoint1;
-    private Vector2 startPoint2;
+    Vector2 startPoint1;
+    Vector2 startPoint2;
 
     // End points that will move with the cursor
     private Vector2 endPoint1;

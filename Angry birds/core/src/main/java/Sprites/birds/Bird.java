@@ -24,7 +24,7 @@ public abstract class Bird {
     public boolean isDragging = false;
     private Vector2 initialTouchPos;
     private boolean trajectoryVisible = false;
-    private Array<Vector2> trajectoryPoints;
+    Array<Vector2> trajectoryPoints;
     private float stationaryTime = 0;
     public boolean hasLaunched = false;
     private float activityTime = 0;
@@ -154,7 +154,7 @@ public abstract class Bird {
         return dragVector.nor().scl(speed).scl(1); // Scale and reverse direction
     }
 
-    private void calculateTrajectory(float endX, float endY) {
+    void calculateTrajectory(float endX, float endY) {
         trajectoryPoints.clear();
         Vector2 startPos = body.getPosition();
         Vector2 initialVelocity = calculateInitialVelocity();
