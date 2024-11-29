@@ -2,7 +2,7 @@
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+This project is a recreation of the popular Angry Birds game using Java and the libGDX framework. The game simulates physics-based destruction where players use a slingshot to launch birds at structures made of materials like glass, wood, and rock, with the goal of eliminating all pigs in the level.
 
 ## Platforms
 
